@@ -4,8 +4,9 @@ import hashlib
 
 
 def clear(clear_dir):
-    if os.listdir(clear_dir):
-        shutil.rmtree(clear_dir)
+    for root, dirs, files in os.walk(clear_dir):
+        for filename in files:
+            os.remove(os.path.join(root, filename))
 
 
 def fill(input_dir, filepath):
@@ -18,7 +19,8 @@ def fill(input_dir, filepath):
             shutil.copy(filepath, new_filepath)
             count = count + 1
         except IOError:
-            os.remove(new_filepath)
+            if os.path.isfile(new_filepath):
+                os.remove(new_filepath)
             break
         print(f"Copied to: {new_filepath}")
 
@@ -47,9 +49,16 @@ def file_md5(filepath):
 
 if __name__ == '__main__':
     sdcard = "/media/thomas/169B-66A4"
-    input_file = "input/BAF-BREIN.mp3"
+    input_files = "input"
     corrupted_dir = "corrupted"
-    clear(sdcard)
-    fill(sdcard, input_file)
-    # corruption_check(sdcard, input_file, corrupted_dir)
-    corruption_check(sdcard, input_file, None)
+    corrupted_dir_count = 0
+    for root, dirs, files in os.walk(input_files):
+        for filename in files:
+            file = os.path.join(root, filename)
+            clear(sdcard)
+            fill(sdcard, file)
+            corrupted_dir_count_path = os.path.join(corrupted_dir, str(corrupted_dir_count))
+            while os.path.isdir(corrupted_dir_count_path) and not os.listdir(corrupted_dir_count_path):
+                corrupted_dir_count = corrupted_dir_count + 1
+            os.makedirs(corrupted_dir_count_path)
+            corruption_check(sdcard, file, corrupted_dir_count_path)
