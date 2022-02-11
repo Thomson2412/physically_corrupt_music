@@ -11,14 +11,16 @@ def clear(clear_dir):
 def fill(input_dir, filepath):
     count = 0
     while True:
+        filename_split = os.path.splitext(filepath)
+        new_filename = f"{filename_split[0]}_{count}{filename_split[1]}"
+        new_filepath = os.path.join(input_dir, new_filename)
         try:
-            filename_split = os.path.splitext(filepath)
-            new_filename = f"{filename_split[0]}_{count}{filename_split[1]}"
-            shutil.copy(filepath, os.path.join(input_dir, new_filename))
+            shutil.copy(filepath, new_filepath)
             count = count + 1
-            print(f"Copied to: {new_filename}")
         except IOError:
+            os.remove(new_filepath)
             break
+        print(f"Copied to: {new_filepath}")
 
 
 def corruption_check(input_dir, filepath_og, output_dir):
