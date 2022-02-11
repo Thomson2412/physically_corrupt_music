@@ -11,7 +11,7 @@ def clear(clear_dir):
 def fill(input_dir, filepath):
     count = 0
     while True:
-        filename_split = os.path.splitext(filepath)
+        filename_split = os.path.splitext(os.path.basename(filepath))
         new_filename = f"{filename_split[0]}_{count}{filename_split[1]}"
         new_filepath = os.path.join(input_dir, new_filename)
         try:
@@ -47,9 +47,9 @@ def file_md5(filepath):
 
 if __name__ == '__main__':
     sdcard = "/media/thomas/169B-66A4"
-    input_file = "input/Jan_Wolkers.mp3"
+    input_file = "input/BAF-BREIN.mp3"
     corrupted_dir = "corrupted"
-    # clear(sdcard)
-    # fill(sdcard, input_file)
+    clear(sdcard)
+    fill(sdcard, input_file)
     # corruption_check(sdcard, input_file, corrupted_dir)
     corruption_check(sdcard, input_file, None)
