@@ -61,5 +61,6 @@ if __name__ == '__main__':
             while os.path.isdir(corrupted_dir_count_path) and not os.listdir(corrupted_dir_count_path):
                 corrupted_dir_count = corrupted_dir_count + 1
                 corrupted_dir_count_path = os.path.join(corrupted_dir, str(corrupted_dir_count))
-            os.makedirs(corrupted_dir_count_path)
+            if not os.path.isdir(corrupted_dir_count_path):
+                os.makedirs(corrupted_dir_count_path)
             corruption_check(sdcard, file, corrupted_dir_count_path)
